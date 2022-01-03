@@ -1,0 +1,19 @@
+/**
+ * SsMembership plugin for Craft CMS
+ *
+ * SsMembership CSS
+ *
+ * @author    ssplugin
+ * @copyright Copyright (c) 2021 ssplugin
+ * @link      http://www.systemseeders.com/
+ * @package   SsMembership
+ * @since     1.0.0
+ */
+.status.suspended, .status.canceled {
+    background-color: #CF1124;
+    border-color: #CF1124 !important;
+}
+.livemode{
+    background-color: #27AB83 !important;
+    color: #fff !important; 
+}

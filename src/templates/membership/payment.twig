@@ -1,0 +1,101 @@
+{% extends "ss-membership/layout/main" %}
+
+{% import "_includes/forms" as forms %}
+
+{# The title of this CP section #}
+{% set title = "Stripe Payment details" %}
+{# The content of the CP Section#}
+{% set content %}
+    {% from _self import errorList %}
+    <form method="POST">
+        {{ csrfInput() }}
+        {{ actionInput('ss-membership/membership/payment') }}
+        {{ redirectInput('ss-membership/membership/payment') }}
+        
+        
+         {{ forms.textField({
+            type:'hidden',
+            id: 'paymentGatewayId',
+            name: 'id',
+            value: paygateway.id,
+        }) }}
+
+        {{ forms.textField({
+            label: 'Live Public Key',
+            instructions: 'Enter stripe live publishable key',
+            id: 'livePublicKey',
+            name: 'livePublicKey',
+            errors: paygateway.getErrors('livePublicKey'),
+            value: paygateway.livePublicKey,
+            required: true
+        }) }}
+
+        {{ forms.textField({
+            label: 'Live Secret Key',
+            instructions: 'Enter stripe live secret key',
+            id: 'liveSecretKey',
+            name: 'liveSecretKey',
+            errors: paygateway.getErrors('liveSecretKey'),
+            value: paygateway.liveSecretKey,
+            required: true
+        }) }}
+
+        {{ forms.textField({
+            label: 'Test Public Key',
+            instructions: 'Enter stripe test publishable key',
+            id: 'testPublicKey',
+            name: 'testPublicKey',
+            first: true,
+            errors: paygateway.getErrors('testPublicKey'),
+            value: paygateway.testPublicKey,
+            required: true
+        }) }}
+
+        {{ forms.textField({
+            label: 'Test Secret Key',
+            instructions: 'Enter stripe test secret key',
+            id: 'testSecretKey',
+            name: 'testSecretKey',
+            first: true,
+            errors: paygateway.getErrors('testSecretKey'),
+            value: paygateway.testSecretKey,
+            required: true
+        }) }}
+
+
+        {{ forms.lightswitchField({
+            label: "Live Mode",
+            instructions: "Enable to use stripe in live mode",
+            name: "liveMode",
+            on: paygateway.liveMode,
+        }) }}
+
+        <div id="webhook-field" class="field first">
+            <div class="heading">
+                <label id="webhook-label" class="required" for="webhook">Stripe Webhook</label>
+            </div>
+            <div id="webhook-instructions" class="instructions">
+                <p>Site URL in livemode must begin with "https://"</p>
+            </div>
+            <div class="input ltr">
+                <strong>                    
+                    {% if paygateway.liveMode %}
+                        {% if paygateway.webhookUrl is not empty %}
+                            {{ paygateway.webhookUrl }}
+                        {% else %}
+                            "Webhook URL not set yet, Click on Save button."
+                        {% endif %}
+                    {% else %}
+                        {% if paygateway.webhookUrlTest is not empty %}
+                            {{ paygateway.webhookUrlTest }}
+                        {% else %}
+                            "Webhook URL not set yet, Click on Save button."
+                        {% endif %}
+                    {% endif %}
+                </strong>
+            </div>    
+        </div>
+
+        <input type="submit" class="btn submit" value="Save">
+    </form>
+{% endset %}

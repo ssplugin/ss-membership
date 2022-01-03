@@ -1,0 +1,143 @@
+{% extends "ss-membership/layout/main" %}
+{% import "_includes/forms" as forms %}
+
+{# The title of this CP section #}
+{% set title = "Subscriptions" %}
+
+{# The content of the CP Section #}
+{% set details %}
+    <div class="meta read-only">
+        <h3>Subscription Details</h3>
+        <div class="data">
+            <h5 class="heading">Customer:</h5>
+            {% set user = subscription.getUser() %}
+            {% if user %}
+                <div class="value"><a href="{{ cpUrl('users/'~user.id) }}">{{ user.name }}</a></div>
+            {% endif %}
+        </div>
+        <div class="data">
+            <h5 class="heading">Created date:</h5>
+            <div class="value">{{ subscription.subStartDate|date('d-m-Y h:i A') }}</div>
+        </div>        
+        <div class="data">
+            <h5 class="heading">End period:</h5>
+            <div class="value">
+                {{ subscription.subEndDate|date('d-m-Y h:i A') }}
+            </div>
+        </div>
+        <div class="data">
+            <h5 class="heading">Subscription ref:</h5>
+            <div class="value">{{ subscription.stripeSubId }}</div>
+        </div>
+
+        {% if subscription.cancelType == "immediately" %}
+            <div class="data">
+                <h5 class="heading">Canceled date:</h5>
+                <div class="value">
+                    {{ subscription.canceledAt|date('d-m-Y h:i A') }}
+                </div>
+            </div>
+        {% elseif subscription.cancelType == "period_end" %}
+            <div class="data">
+                <h5 class="heading">Cancel at:</h5>
+                <div class="value">
+                    {{ subscription.cancelAt|date('d-m-Y h:i A') }} 
+                </div>
+            </div>
+        {% endif %}
+        <div class="data">
+            <h5 class="heading">Status:</h5>
+            <div class="value">
+                <span class="status {{ subscription.status }}"></span>{{ subscription.status|capitalize }}</div>
+        </div>
+    </div>
+{% endset %}
+{% set content %}    
+    <h2>Subscription plan - {{ subscription.name }}</h2> <hr>
+   
+    <h2>Cancel Subscription</h2>
+    {% if subscription.cancelType == "immediately" %}
+        <p>Your subscription has canceled.</p>        
+    {% else %}
+        {% if subscription.cancelType == "period_end" %}
+            <p>Subscription will cancel automatically at the end of the {{ subscription.cancelAt|date('d-m-Y h:i A') }}</p>
+        {% endif %}
+        <form action="" method="post" id="cancelSub" accept-charset="UTF-8">
+            {{ csrfInput() }}
+            {{ actionInput( 'ss-membership/subscription/cancel' ) }}
+            {{ redirectInput( 'ss-membership/subscription/'~subscription.id ) }}
+            {{ hiddenInput( 'subUid', subscription.uid|hash ) }}
+            <div class="field" id="fd-sub-from-field">
+                <div class="heading">
+                    <label id="fd-sub-from-label" for="fd_sub-from"> Subscription cancellation on</label>
+                </div>
+                <div class="">
+                    <div class="select">
+                        <select id="fd_sub-from" name="cancelType">
+                            <option value="immediately"> Immediately </option>
+                            {% if subscription.cancelType != "period_end" %}
+                            <option value="period_end"> Cancel at period end</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <input type="submit" class="btn submit" id="cancelbtn" value="Cancel">
+        </form>
+    {% endif %}
+    <hr>
+
+    <h2>Payment Invoices</h2>
+    <table class="data fullwidth collapsible">
+        <thead>
+            <tr>
+                <th>Amount</th>
+                <th>Reference</th>
+                <th>Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% set tz = craft.app.getTimezone() %}
+            {% for payment in subscription.getPayments %}
+            <tr>
+                <td><strong>${{ payment.amount/100 }}</strong>&nbsp;&nbsp;&nbsp;USD </td>
+                <td>{{ payment.paymentId }}</td> 
+                <td>{{ payment.payDate|date }}</td>
+                <td>{{ tz }}</td>        
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table><hr>
+
+    <h2>Logs</h2>
+    <table class="data fullwidth collapsible">
+        <thead>
+            <tr>        
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in subscription.getLogs %}
+            <tr>
+                <td width="55%">
+                    {{ log.logMessage }}
+                </td>
+                <td>
+                    {{ log.dateCreated|datetime }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endset %}
+{% js %}
+    $(document).ready( function() {
+        // Cancel subscription
+        $( '#cancelbtn' ).click( function(e) {
+            e.preventDefault();
+            if( confirm( "Are you sure you want to cancel subscription?" ) ) {
+                $( '#cancelSub' ).submit();
+            }
+        });        
+    });
+{% endjs %}

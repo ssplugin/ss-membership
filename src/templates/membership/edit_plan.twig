@@ -1,0 +1,83 @@
+{% extends "ss-membership/layout/main" %}
+
+{% import "_includes/forms" as forms %}
+
+{# The title of this CP section #}
+{% set title = "Edit Membership Plan" %}
+{# The content of the CP Section#}
+{% set content %}
+	{% set userGroups = craft.app.userGroups.getAllGroups() %}
+    
+    <form method="POST">
+    	{{ csrfInput() }}
+        {{ actionInput('ss-membership/membership/update-or-create') }}
+        {{ redirectInput('ss-membership/membership/add') }}
+        
+        {{ forms.textField({
+            id: 'id',
+            name: 'id',
+            type: 'hidden',
+            errors: membership.getErrors('id'),
+            value: membership.id
+        }) }}
+
+        {{ forms.textField({
+            label: 'Subscription plan name',
+            instructions: 'Membership name for the site.',
+            id: 'name',
+            name: 'name',
+            first: true,
+            errors: membership.getErrors('name'),
+            value: membership.name,
+            required: true
+        }) }}
+       
+        <div id="amount-field" class="field first">
+            <div class="heading">
+                <label id="amount-label" class="required" for="amount">Subscription Amount</label>
+            </div>
+            <div id="amount-instructions" class="instructions">
+                <p>You can't able to change Subscription amount.</p>
+            </div>
+            <div class="input ltr">
+                <strong>${{ membership.amount }}</strong>
+            </div>    
+        </div>
+
+        <div id="interval-field" class="field first">
+            <div class="heading">
+                <label id="interval-label" class="required" for="interval">Subscription interval</label>
+            </div>
+            <div id="interval-instructions" class="instructions">
+                <p>Interval not changeable.</p>
+            </div>
+            <div class="input ltr">
+                <strong>{{ membership.interval }}</strong>
+            </div>    
+        </div>
+
+	    {{ forms.selectField({
+	        label: 'User Group',
+	        instructions: "Please select user group for this subscription",
+	        id: "userGroupId",
+	        name: "userGroupId",
+            errors: membership.getErrors('userGroupId'),
+	        options: userGroups | map((ug) => { value: ug.id, label: ug.name }),
+            value: membership.userGroupId,
+	        required: true
+	    }) }}
+
+        {{ forms.lightswitchField({
+            label: "Status",
+            instructions: "Status of subscription plan",
+            name: "enabled",
+            on: membership.enabled,
+        }) }}
+
+	    <input type="submit" class="btn submit" value="Save">
+        &nbsp;&nbsp;
+        <a href="{{ cpUrl('ss-membership/membership')}}" class="btn light flex-grow">Cancel</a>
+    </form>
+
+    
+{% endset %}

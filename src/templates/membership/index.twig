@@ -1,0 +1,58 @@
+{% extends "ss-membership/layout/main" %}
+
+{% import "_includes/forms" as forms %}
+
+{# The title of this CP section #}
+{% set title = "Membership Plan" %}
+
+{% block actionButton %}
+    <a href="{{ cpUrl('ss-membership/membership/add') }}" class="add icon btn submit">Add New Plan</a>
+{% endblock %}
+
+{# The content of the CP Section #}
+{% set content %}
+	{% set userGroups = craft.app.userGroups.getAllGroups() %}
+    <table id="membershipPlan" class="data fullwidth collapsible">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Handle</th>
+                <th scope="col">Interval</th>
+                <th scope="col">Amount</th>
+                <th scope="col">User Group</th>
+                <th scope="col">Status</th>
+                <th scope="col">Last Updated</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if membership is not empty %}
+                {% for membershipPlan in membership %}
+                    <tr data-id="{{ membershipPlan.id }}" data-name="{{ membershipPlan.name }}">
+                        <td>
+                            <a href="{{ cpUrl("ss-membership/membership/#{membershipPlan.id}") }}">{{ membershipPlan.name }}</a>
+                        </td>
+                        <td>{{ membershipPlan.handle }}</td>
+                        <td>{{ membershipPlan.interval|ucfirst }}</td>
+                        <td>${{ membershipPlan.amount }} ( USD )</td>
+
+                        {% for userGroup in userGroups %}
+                            {% if userGroup.id == membershipPlan.userGroupId  %}
+                                <td>{{ userGroup.name }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        {% if membershipPlan.enabled %}
+                            <td>Active</td>
+                        {% else %}
+                            <td>Inactive</td>
+                        {% endif %}
+                        <td>{{ membershipPlan.dateUpdated|datetime }}</td>                       
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4" align="center">Plan not added yet </td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+{% endset %}

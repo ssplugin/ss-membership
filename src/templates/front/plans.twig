@@ -1,0 +1,14 @@
+{% set plans = craft.ssMembership.getActiveMembershipPlan() %}
+{% if plans is not empty %}
+    {% set class = params.class ?? '' %}
+    {% set id = params.id ?? '' %}
+    <select name="ssplan_id" class="ssplan {{ class }}" id="{{ id }}">
+        {% for plan in plans %}
+            <option value="{{ plan.id }}">{{ plan.name }}</option>
+        {% else %}
+            <p>Membership plan not found</p>
+        {% endfor %}
+    </select>
+{% else %}
+    <p>Membership plan does't found.</p>
+{% endif %}

@@ -1,0 +1,47 @@
+{% extends "ss-membership/layout/main" %}
+
+{% import "_includes/forms" as forms %}
+
+{# The title of this CP section #}
+{% set title = "Subscriptions" %}
+
+{# The content of the CP Section#}
+{% set content %}
+    <h2></h2>
+    <table id="membershipPlan" class="data fullwidth collapsible">
+        <thead>
+            <tr>
+                <th scope="col">Plan Name</th>
+                <th scope="col">Username</th>
+                <th scope="col">Status</th>
+                <th scope="col">Interval</th>
+                <th scope="col">Period Start</th>
+                <th scope="col">Period End</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if subscriptions is not empty %}
+                
+                {% for subscription in subscriptions %}
+                    {% set plan = subscription.getMembershipPlan() %}
+                    {% set user = subscription.getUser() %}
+                    {% if user %}
+                    <tr>
+                        <td><a href="{{ cpUrl('ss-membership/subscription/'~subscription.id) }}">Subscription - {{ plan.name }}</a></td>
+                        <td><a href="{{ cpUrl('users/'~user.id) }}">{{ user.username }}</a></td>
+                        <td> <span class="status {{ subscription.status }}"></span>{{ subscription.status }}</td>
+                        <td>{{ subscription.interval }}</td>
+                        
+                        <td>{{ subscription.subStartDate|datetime }}</td>
+                        <td>{{ subscription.subEndDate|datetime }}</td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4" align="center">Subscription not found.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+{% endset %}

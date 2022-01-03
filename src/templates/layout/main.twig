@@ -1,0 +1,36 @@
+{% extends "_layouts/cp" %}
+{% do view.registerAssetBundle("ssplugin\\ssmembership\\assetbundles\\ssmembership\\SsMembershipAsset") %}
+
+{% block sidebar %}
+    <nav aria-label="Sources">
+        <ul>
+            <li>
+                <a href="{{cpUrl('ss-membership/config')}}" {% if craft.app.request.getSegment(2) == 'config' %} class="sel" {% endif %}> Stripe Gateway </a>
+            </li>
+            <li>
+                <a href="{{cpUrl('ss-membership/membership') }}" {% if craft.app.request.getSegment(2) == 'membership' %} class="sel" {% endif %}> Membership Plan </a>
+            </li>
+
+            <li class="heading">
+                <span>Subscription</span>
+            </li>            
+            {% for plan in craft.ssMembership.mebershipPlan() %}
+            <li>
+                <a href="{{cpUrl('ss-membership/subscriptions/'~plan.id) }}" class ="
+                    {% if ( subscription is defined and subscription.membershipPlanId == plan.id ) or ( craft.app.request.getSegment(2) == 'subscriptions' and craft.app.request.getSegment(3) == plan.id ) %} sel {% endif %}">
+                    {{ plan.name }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </nav>
+{% endblock %}
+{% block toolbar %}
+    {% if craft.app.request.getSegment(2) != 'config' %}
+        {% if craft.ssMembership.isLive() %}
+            <a href="{{ cpUrl('ss-membership/config') }}" class="btn livemode">Live Mode</a>
+        {% else %}
+            <a href="{{ cpUrl('ss-membership/config') }}" class="btn">Test Mode</a>
+        {% endif %}
+    {% endif %}
+{% endblock %}
