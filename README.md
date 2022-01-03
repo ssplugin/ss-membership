@@ -98,7 +98,7 @@ Note, if logged in User have already subscribed any of the subcription plan then
 </form>
 ```
 
-<h4>Subscribe with logged in User:</h4>
+<h4>Cancel subscription:</h4>
 
 Cancel user's subscription immediately. The customer will not be charged again for the subscription.
 
