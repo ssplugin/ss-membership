@@ -2,7 +2,7 @@
     "name": "ssplugin/ss-membership",
     "description": "Craft CMS membership with stripe.",
     "type": "craft-plugin",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "keywords": [
         "craft",
         "cms",
@@ -36,7 +36,7 @@
         }
     },
     "extra": {
-        "name": "SS Membership",
+        "name": "SS Craft Membership",
         "handle": "ss-membership",
         "developer": "ssplugin",
         "developerUrl": "http://www.systemseeders.com/",
