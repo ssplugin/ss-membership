@@ -37,6 +37,7 @@ use craft\controllers\UsersController;
 use craft\web\View;
 use ssplugin\ssmembership\assetbundles\ssmembership\SsMembershipAsset;
 use ssplugin\ssmembership\services\Paymentgateway;
+use craft\base\Model;
 /**
  * Craft plugins are very much like little applications in and of themselves. We’ve made
  * it as simple as we can, but the training wheels are off. A little prior knowledge is
@@ -75,21 +76,21 @@ class SsMembership extends Plugin
      *
      * @var string
      */
-    public $schemaVersion = '1.0.1';
+    public string $schemaVersion = '1.0.2';
 
     /**
      * Set to `true` if the plugin should have a settings view in the control panel.
      *
      * @var bool
      */
-    public $hasCpSettings = true;
+    public bool $hasCpSettings = true;
 
     /**
      * Set to `true` if the plugin should have its own section (main nav item) in the control panel.
      *
      * @var bool
      */
-    public $hasCpSection = true;    
+    public bool $hasCpSection = true;    
     
     /**
      * Set our $plugin static property to this class so that it can be accessed via
@@ -107,7 +108,7 @@ class SsMembership extends Plugin
         parent::init();
         self::$plugin = $this;
 
-        $fileTarget = new \craft\log\FileTarget([
+        $fileTarget = new \yii\log\FileTarget([
             'logFile' => '@storage/logs/ssmembership.log',
             'categories' => ['ss-membership']
         ]);
@@ -173,6 +174,7 @@ class SsMembership extends Plugin
 
         if ( Yii::$app->db->schema->getTableSchema('ssmembership_paymentgateway') != null ) {            
             $gateway = SsMembership::getInstance()->paymentGateway->getPaymentGateway();
+
             if( $gateway ) {
                 if( $gateway->liveMode ) {
                     self::$STRIPE_KEY    = $gateway->livePublicKey;
@@ -209,7 +211,7 @@ class SsMembership extends Plugin
      *
      * @return \craft\base\Model|null
      */
-    protected function createSettingsModel()
+    protected function createSettingsModel(): model
     {
         return new Settings();
     }

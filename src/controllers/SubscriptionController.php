@@ -34,18 +34,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
 
 class SubscriptionController extends BaseController
-{
-
-    // Protected Properties
-    // =========================================================================
-
-    /**
-     * @var    bool|array Allows anonymous access to this controller's actions.
-     *         The actions must be in 'kebab-case'
-     * @access protected
-     */
-    protected $allowAnonymous = [];
-    
+{    
     /**
      *
      * @return mixed

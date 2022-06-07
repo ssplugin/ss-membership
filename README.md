@@ -1,13 +1,13 @@
-# SsMembership plugin for Craft CMS 3.x
+# SsMembership plugin for Craft CMS 4.x
 
 A membership site lets you limit access to your site’s content to only paid users.
 <p>SS Craft Membership plugin will easily integrate with Stripe so you can accept membership payments and protect your content from non subscribed users. It will help you to setup membership integration of your site. 
                                     </p>
-To read plugin documentation <a target="_blank" href="https://datadazzle.com/ssplugin/"> SsMembership Documentation</a> 
+To read plugin documentation <a target="_blank" href="http://datadazzle.com/ssplugin/"> SsMembership Documentation</a> 
 
 ## Requirements
 
-This plugin requires Craft CMS 3.0.0-beta.23 or later.
+This plugin requires Craft CMS 4 or later and PHP 8.
 
 ## Installation
 

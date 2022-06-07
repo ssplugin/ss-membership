@@ -33,10 +33,13 @@ use craft\helpers\UrlHelper;
  */
 class Paymentgateway extends Component
 {
-    public function getPaymentGateway()
+    public function getPaymentGateway(): mixed
     {
         $rows = $this->_createQuery()
-            ->one();
+            ->one();        
+        if (!$rows) {
+            return null;
+        }
         return new SsPaymentGateway($rows);
     }
 
@@ -75,8 +78,7 @@ class Paymentgateway extends Component
                 'dateUpdated',
                 'uid'
             ])
-            ->from('{{%ssmembership_paymentgateway}}')
-            ->orderBy('dateCreated ASC');
+            ->from('{{%ssmembership_paymentgateway}}');        
     }
 
     private function _getPaymentGatewayModels(array $rows): array
@@ -118,11 +120,10 @@ class Paymentgateway extends Component
     protected function handleWebhook( $record )
     {
         if( $record ) {
-            $url = UrlHelper::baseUrl().'ss-membership/event';
-
+            $url = UrlHelper::baseUrl().'/ss-membership/event';            
             if( $record->liveMode ) {
                 $url = parse_url($url);
-
+                
                 // Live mode webhook url must be "https"
                 if( $url['scheme'] == 'https' ) {
                     $liveSecret = $record->liveSecretKey;
@@ -152,7 +153,7 @@ class Paymentgateway extends Component
 
     protected function createWebhook( $stripe, $record )
     {
-        $url = UrlHelper::baseUrl().'ss-membership/event';           
+        $url = UrlHelper::baseUrl().'/ss-membership/event';           
         if( !empty( $url ) ) {                
             $webhook = $stripe->webhookEndpoints->create([
                 'url' => $url,
@@ -175,7 +176,7 @@ class Paymentgateway extends Component
 
     protected function updateWebhook( $stripe, $record )
     {        
-        $url = UrlHelper::baseUrl().'ss-membership/event';
+        $url = UrlHelper::baseUrl().'/ss-membership/event';
         if( !empty( $url ) ) {                             
             if( $record->liveMode ){
                 $webhook = $stripe->webhookEndpoints->update(

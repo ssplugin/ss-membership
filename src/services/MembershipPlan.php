@@ -88,6 +88,10 @@ class MembershipPlan extends Component
     private function _createQuery(): Query
     {
         $gateway = SsMembership::getInstance()->paymentGateway->getPaymentGateway();
+        $isLive = 0;
+        if( $gateway ){
+            $isLive = $gateway->liveMode;
+        }
         $query = (new Query)
             ->select([
                 'id',
@@ -107,7 +111,7 @@ class MembershipPlan extends Component
                 'isLive'
             ])
             ->from( '{{%ssmembership_plan}}' )
-            ->where(['isLive' => $gateway->liveMode])
+            ->where(['isLive' => $isLive])
             ->orderBy( 'dateCreated ASC' );
         return $query;
     }

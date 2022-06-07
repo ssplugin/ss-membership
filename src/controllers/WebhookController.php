@@ -47,7 +47,7 @@ class WebhookController extends BaseController
      *         The actions must be in 'kebab-case'
      * @access protected
      */
-    protected $allowAnonymous = ['index', 'sub-update', 'sub-cancel'];
+    protected array|int|bool $allowAnonymous = ['index', 'sub-update', 'sub-cancel'];
     
 
     /**
@@ -57,7 +57,7 @@ class WebhookController extends BaseController
     public function actionIndex(  )
     {
         try {
-
+            
             \Stripe\Stripe::setApiKey( SsMembership::$STRIPE_SECRET );
            
             $payload = @file_get_contents('php://input');

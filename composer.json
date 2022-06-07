@@ -2,7 +2,7 @@
     "name": "ssplugin/ss-membership",
     "description": "Craft CMS membership with stripe.",
     "type": "craft-plugin",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "keywords": [
         "craft",
         "cms",
@@ -11,7 +11,7 @@
         "ssmembership"
     ],
     "support": {
-        "docs": "https://datadazzle.com/ssplugin",
+        "docs": "http://datadazzle.com/ssplugin",
         "issues": "https://github.com/ssplugin/ss-craft-membership/issues"
     },
     "license": "MIT",
@@ -22,11 +22,11 @@
         }
     ],
     "require": {
-        "craftcms/cms": "^3.0.0",
-        "stripe/stripe-php": "7.92.0"
+        "craftcms/cms": "^4.0.0",
+        "stripe/stripe-php": "7.92.0",
+        "php": "^8.0"
     },
-    "require-dev": {
-      "craftcms/cms": "^3.2.0",
+    "require-dev": {     
       "codeception/codeception": "^3.0",
       "vlucas/phpdotenv": "^3.0"
     },
@@ -40,7 +40,7 @@
         "handle": "ss-membership",
         "developer": "ssplugin",
         "developerUrl": "http://www.systemseeders.com/",
-        "documentationUrl": "https://datadazzle.com/ssplugin",
+        "documentationUrl": "http://datadazzle.com/ssplugin",
         "changelogUrl": "https://github.com/ssplugin/ss-craft-membership/blob/main/CHANGELOG.md",
         "components": {
             "membership": "ssplugin\\ssmembership\\services\\Membership"

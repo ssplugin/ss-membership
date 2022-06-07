@@ -41,7 +41,7 @@ class MembershipController extends BaseController
      *         The actions must be in 'kebab-case'
      * @access protected
      */
-    protected $allowAnonymous = [ 'add', 'edit', 'update-or-create', 'delete', 'payment', 'validate-keys'];
+    protected array|int|bool $allowAnonymous = [ 'add', 'edit', 'update-or-create', 'delete', 'payment', 'validate-keys'];
 
     // Public Methods
     // =========================================================================
@@ -55,9 +55,9 @@ class MembershipController extends BaseController
     public function actionAdd()
     {        
     	//check stripe details
-    	$exitPaymentGateway = SsMembership::getInstance()->paymentGateway->getPaymentGateway();
+    	$existPaymentGateway = SsMembership::getInstance()->paymentGateway->getPaymentGateway();
     	
-    	if(!empty($exitPaymentGateway->id) && !empty( $exitPaymentGateway->testSecretKey ) ) {
+    	if(!empty($existPaymentGateway->id) && !empty( $existPaymentGateway->testSecretKey ) ) {
     		$membership = new Membership();
         	return $this->renderTemplate( 'ss-membership/membership/add_plan', [ 'membership'=> $membership ] );
     	}
@@ -66,7 +66,7 @@ class MembershipController extends BaseController
     }
     
     public function actionEdit( $id )
-    {
+    {        
         $membership = SsMembership::getInstance()->membershipPlan->getMembershipPlanById( $id );
         if( empty( $membership ) ) {
             return $this->redirect( 'ss-membership/membership' );
@@ -163,8 +163,8 @@ class MembershipController extends BaseController
         $this->requireAdmin();
         $request = Craft::$app->getRequest()->getBodyParams();
         
-        $exitPaymentGateway = SsMembership::getInstance()->paymentGateway->getPaymentGateway();
-
+        $existPaymentGateway = SsMembership::getInstance()->paymentGateway->getPaymentGateway();
+        
         if ( Craft::$app->getRequest()->isPost ) {
             if( $request[ 'id' ] ) {
                 $paygateway = SsMembership::getInstance()->paymentGateway->getPaymentGatewayById( $request[ 'id' ] );
@@ -199,7 +199,7 @@ class MembershipController extends BaseController
             }
             return $this->renderTemplate( 'ss-membership/membership/payment', [ 'paygateway' => $paygateway ] );
         }
-        return $this->renderTemplate( 'ss-membership/membership/payment', [ 'paygateway' => $exitPaymentGateway ] );
+        return $this->renderTemplate( 'ss-membership/membership/payment', [ 'paygateway' => $existPaymentGateway ] );
     }
 
     protected function validateKey( $key )

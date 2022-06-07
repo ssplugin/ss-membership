@@ -87,7 +87,7 @@ class SsPaymentGateway extends Model
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             ['livePublicKey', 'required'],

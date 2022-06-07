@@ -17,7 +17,7 @@
             type:'hidden',
             id: 'paymentGatewayId',
             name: 'id',
-            value: paygateway.id,
+            value: paygateway.id ?? '',
         }) }}
 
         {{ forms.textField({
@@ -25,8 +25,8 @@
             instructions: 'Enter stripe live publishable key',
             id: 'livePublicKey',
             name: 'livePublicKey',
-            errors: paygateway.getErrors('livePublicKey'),
-            value: paygateway.livePublicKey,
+            errors: paygateway.getErrors('livePublicKey') ?? '',
+            value: paygateway.livePublicKey ?? '',
             required: true
         }) }}
 
@@ -35,8 +35,8 @@
             instructions: 'Enter stripe live secret key',
             id: 'liveSecretKey',
             name: 'liveSecretKey',
-            errors: paygateway.getErrors('liveSecretKey'),
-            value: paygateway.liveSecretKey,
+            errors: paygateway.getErrors('liveSecretKey') ?? '',
+            value: paygateway.liveSecretKey ?? '',
             required: true
         }) }}
 
@@ -46,8 +46,8 @@
             id: 'testPublicKey',
             name: 'testPublicKey',
             first: true,
-            errors: paygateway.getErrors('testPublicKey'),
-            value: paygateway.testPublicKey,
+            errors: paygateway.getErrors('testPublicKey') ?? '',
+            value: paygateway.testPublicKey ?? '',
             required: true
         }) }}
 
@@ -57,8 +57,8 @@
             id: 'testSecretKey',
             name: 'testSecretKey',
             first: true,
-            errors: paygateway.getErrors('testSecretKey'),
-            value: paygateway.testSecretKey,
+            errors: paygateway.getErrors('testSecretKey') ?? '',
+            value: paygateway.testSecretKey ?? '',
             required: true
         }) }}
 
@@ -67,7 +67,7 @@
             label: "Live Mode",
             instructions: "Enable to use stripe in live mode",
             name: "liveMode",
-            on: paygateway.liveMode,
+            on: paygateway.liveMode ?? '',
         }) }}
 
         <div id="webhook-field" class="field first">
@@ -78,18 +78,20 @@
                 <p>Site URL in livemode must begin with "https://"</p>
             </div>
             <div class="input ltr">
-                <strong>                    
-                    {% if paygateway.liveMode %}
-                        {% if paygateway.webhookUrl is not empty %}
-                            {{ paygateway.webhookUrl }}
+                <strong>
+                    {% if paygateway is not empty %}
+                        {% if paygateway.liveMode %}
+                            {% if paygateway.webhookUrl is not empty %}
+                                {{ paygateway.webhookUrl }}
+                            {% else %}
+                                "Webhook URL not set yet, Click on Save button."
+                            {% endif %}
                         {% else %}
-                            "Webhook URL not set yet, Click on Save button."
-                        {% endif %}
-                    {% else %}
-                        {% if paygateway.webhookUrlTest is not empty %}
-                            {{ paygateway.webhookUrlTest }}
-                        {% else %}
-                            "Webhook URL not set yet, Click on Save button."
+                            {% if paygateway.webhookUrlTest is not empty %}
+                                {{ paygateway.webhookUrlTest }}
+                            {% else %}
+                                "Webhook URL not set yet, Click on Save button."
+                            {% endif %}
                         {% endif %}
                     {% endif %}
                 </strong>
