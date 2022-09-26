@@ -1,6 +1,6 @@
 # SS Craft Membership Changelog
 
-## 1.0.2 - 2022-09-26
+## 3.0.1 - 2022-09-26
 ### Added
 - Updated Stripe Token Handling Code
 
