@@ -81,10 +81,15 @@ Note, if logged in User have already subscribed any of the subcription plan then
 {# Make sure user is logged in #}
 {% requireLogin %}
 {% set plans = craft.ssMembership.getplan() %}
-<form method="post">
+<form method="post" id="ss-membership-form">
     {{ csrfInput() }}
     {{ hiddenInput( 'action', 'ss-membership/subscription/switch' ) }}
-    <select name="planUid" class="">
+    {{ hiddenInput( 'firstName', craft.app.user.identity.firstName ) }}
+    {{ hiddenInput( 'lastName', craft.app.user.identity.lastName ) }}
+    {{ hiddenInput( 'username', craft.app.user.identity.username ) }}
+    {{ hiddenInput( 'email', craft.app.user.identity.email ) }}
+    
+    <select name="planUid" required>
         <option value=""> Select Plan </option>
         {% for plan in plans %}
             <option value="{{ plan.uid|hash }}"> {{ plan.name }} </option>
