@@ -75,7 +75,7 @@ class SsMembership extends Plugin
      *
      * @var string
      */
-    public $schemaVersion = '3.0.1';
+    public $schemaVersion = '1.0.3';
 
     /**
      * Set to `true` if the plugin should have a settings view in the control panel.
