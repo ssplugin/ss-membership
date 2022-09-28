@@ -88,6 +88,17 @@ class SsMembershipVariable
 
     public function paymentField( $params = null ) 
     {
+        $params[ 'stripe_public_key' ] = '';
+        $gateway = SsMembership::getInstance()->paymentGateway->getPaymentGateway();
+        if( $gateway ) {
+            if( !empty( $gateway->id ) ) {
+                if( $gateway->liveMode ){
+                    $params[ 'stripe_public_key' ] = $gateway->livePublicKey;
+                } else {
+                    $params[ 'stripe_public_key' ] = $gateway->testPublicKey;
+                }
+            }
+        }
         $oldMode = \Craft::$app->view->getTemplateMode();
         Craft::$app->view->setTemplateMode( View::TEMPLATE_MODE_CP );
         $html = \Craft::$app->view->renderTemplate( 'ss-membership/front', [ 'params' => $params ] );
