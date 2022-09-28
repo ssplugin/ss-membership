@@ -10,8 +10,6 @@
  * @since     1.0.0
  */
  
-var stripe = Stripe('pk_test_YUZ8G5Eb5UyV7yDOXCMk4g2J');
-var elements = stripe.elements();
 var elementStyles = {
     base: {
         color: '#32325D',
@@ -41,44 +39,51 @@ var elementClasses = {
     focus: 'StripeElement--focus',
     invalid: 'StripeElement--invalid',
     webkitAutoFill: 'StripeElement--webkit-autofill'
-};
+}; 
 
-var card = elements.create('card', {style: elementStyles,
-    classes: elementClasses, hidePostalCode: true});
-card.mount('#card-element');
+var subscribeForm = document.getElementById( 'ss-membership-form' );
+if( subscribeForm !== null ) {
+    var public_key = subscribeForm.elements[ 'stripe_public_key' ].value;
+    if( public_key != '' ) {
+        var stripe = Stripe( public_key );
+        var elements = stripe.elements();
 
-card.on('change', function(event) {
-    setOutcome(event);
-});
+        var card = elements.create('card', {style: elementStyles,
+            classes: elementClasses, hidePostalCode: true});
+        card.mount('#card-element');
 
-var subscribeForm = document.getElementById('ss-membership-form');
-subscribeForm.addEventListener( 'submit', function( event ) {
-    event.preventDefault();
+        card.on('change', function(event) {
+            setOutcome(event);
+        });
 
-    const inputs = subscribeForm.elements;
-    var cardName = '';
-    if( inputs[ 'firstName' ].value == '' || inputs[ 'lastName' ].value == '' ) {
-        cardName = inputs[ 'username' ].value;
-    } else {
-        cardName = inputs[ 'firstName' ].value + ' ' + inputs[ 'lastName' ].value;
+        subscribeForm.addEventListener( 'submit', function( event ) {
+            event.preventDefault();
+            const inputs = subscribeForm.elements;
+            var cardName = '';
+            if( inputs[ 'firstName' ].value == '' || inputs[ 'lastName' ].value == '' ) {
+                cardName = inputs[ 'username' ].value;
+            } else {
+                cardName = inputs[ 'firstName' ].value + ' ' + inputs[ 'lastName' ].value;
+            }
+
+            stripe.createPaymentMethod({
+                type: 'card',
+                card: card,
+                billing_details: {
+                    name: cardName.trim(),
+                    email: inputs[ 'email' ].value,
+                },
+            }).then(function(result) {
+                if (result.error) {
+                    setOutcome(result);
+                } else {
+                    // Send the token to your server.
+                    stripeTokenHandler( result.paymentMethod );
+                }
+            });
+        });
     }
-
-    stripe.createPaymentMethod({
-        type: 'card',
-        card: card,
-        billing_details: {
-            name: cardName.trim(),
-            email: inputs[ 'email' ].value,
-        },
-    }).then(function(result) {
-        if (result.error) {
-            setOutcome(result);
-        } else {
-            // Send the token to your server.
-            stripeTokenHandler( result.paymentMethod );
-        }
-    });
-});
+}
 
 function stripeTokenHandler( paymentMethod ) {
     // Insert the token ID into the form so it gets submitted to the server
