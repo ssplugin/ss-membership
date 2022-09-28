@@ -1,5 +1,9 @@
 # SS Craft Membership Changelog
 
+## 4.0.1 - 2022-09-28
+### Fixed
+- minor bug fixed.
+
 ## 4.0.0 - 2022-09-28
 ### Added
 - Updated Stripe Token Handling Code
