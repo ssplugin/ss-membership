@@ -12,7 +12,7 @@
     ],
     "support": {
         "docs": "http://datadazzle.com/ssplugin",
-        "issues": "https://github.com/ssplugin/ss-craft-membership/issues"
+        "issues": "https://github.com/ssplugin/ss-membership/issues"
     },
     "license": "MIT",
     "authors": [
@@ -41,7 +41,7 @@
         "developer": "ssplugin",
         "developerUrl": "http://www.systemseeders.com/",
         "documentationUrl": "http://datadazzle.com/ssplugin",
-        "changelogUrl": "https://github.com/ssplugin/ss-craft-membership/blob/main/CHANGELOG.md",
+        "changelogUrl": "https://github.com/ssplugin/ss-membership/blob/main/CHANGELOG.md",
         "components": {
             "membership": "ssplugin\\ssmembership\\services\\Membership"
         },
