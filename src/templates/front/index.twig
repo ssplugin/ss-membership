@@ -1,3 +1,6 @@
+{% if params.stripe_public_key is not empty %}
+    <input type="hidden" name="stripe_public_key" value="{{ params.stripe_public_key }}" />
+{% endif %}
 {% set class = params.class ?? '' %}
 <div class="{{ class }}">
     <div class="card_error errors" id="card_errors" role="alert" style="color: #E25950;"></div>
